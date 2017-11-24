@@ -1,6 +1,6 @@
 var mode = "<h1 class=\"cover-heading\">Select a mode</h1>\
             <p class=\"lead\">\
-              <button onclick=\"map()\" class=\"btn btn-lg btn-secondary\">Map</button>\
+              <button onclick=\"newMap()\" class=\"btn btn-lg btn-secondary\">Map</button>\
               <button onclick=\"stats()\" class=\"btn btn-lg btn-secondary\">Stats</button>\
             </p>";
 
@@ -16,17 +16,17 @@ $(document).ready(function() {
 });
 
 function parseFile() {
-	console.log(window.xmlOpened);
 	document.getElementById("content").innerHTML = mode;
 }
 
-function newMap(xml) {
+function newMap() {
+      var xml=window.xmlOpened;
       var mapOptions = {
           zoom: 5,
           center: new google.maps.LatLng(46.003257147967815399169921875, 8.95168307237327098846435546875),
           mapTypeId: 'roadmap'
       };
-      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      var map = new google.maps.Map(document.getElementById('content'), mapOptions);
       var points = [];
         var bounds = new google.maps.LatLngBounds();
          $(xml).find("trkpt").each(function() {
@@ -57,16 +57,15 @@ function initMap() {
 
 function openFile() {
   var x = document.getElementById("exampleInputFile");
-  console.log(x);
   if ('files' in x) {
     var file = x.files[0];
     var reader = new FileReader();
     reader.onload = function(){
       window.xmlOpened = reader.result;
+      console.log(xmlOpened);
       parseFile();
     };
-    reader.readAsDataURL(file);
+    reader.readAsText(file);
   }
   
-
 };
