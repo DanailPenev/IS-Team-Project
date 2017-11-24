@@ -16,7 +16,7 @@ $(document).ready(function() {
 });
 
 function parseFile() {
-	console.log(xmlOpened);
+	console.log(window.xmlOpened);
 	document.getElementById("content").innerHTML = mode;
 }
 
@@ -55,12 +55,18 @@ function initMap() {
 	var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 }
 
-function openFile(event) {
-    var input = event.target;
-
+function openFile() {
+  var x = document.getElementById("exampleInputFile");
+  console.log(x);
+  if ('files' in x) {
+    var file = x.files[0];
     var reader = new FileReader();
-    reader.onload = function() {
-      xmlOpened = reader.result;
+    reader.onload = function(){
+      window.xmlOpened = reader.result;
+      parseFile();
     };
-    parseFile();
+    reader.readAsDataURL(file);
+  }
+  
+
 };
