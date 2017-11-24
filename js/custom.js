@@ -21,6 +21,9 @@ function parseFile() {
 
 function newMap() {
     $("#removeme").css("visibility", "hidden");
+    var element = document.getElementById("removeme");
+    element.outerHTML = "";
+    delete element;
     var mapElement = document.getElementById("map");
     mapElement.style.width = "100%";
     mapElement.style.height = "100%";
@@ -55,6 +58,11 @@ function openFile() {
   var x = document.getElementById("exampleInputFile");
   if ('files' in x) {
     var file = x.files[0];
+    var parts = file.name.split('.');
+    var ext = parts[parts.length - 1];
+    if (ext != 'gpx') {
+      return;
+    }
     var reader = new FileReader();
     reader.onload = function(){
       window.xmlOpened = reader.result;
