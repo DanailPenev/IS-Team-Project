@@ -20,13 +20,17 @@ function parseFile() {
 }
 
 function newMap() {
-      var xml=window.xmlOpened;
+    $("#removeme").css("visibility", "hidden");
+    var mapElement = document.getElementById("map");
+    mapElement.style.width = "100%";
+    mapElement.style.height = "100%";
+        var xml=window.xmlOpened;
       var mapOptions = {
           zoom: 5,
           center: new google.maps.LatLng(46.003257147967815399169921875, 8.95168307237327098846435546875),
           mapTypeId: 'roadmap'
       };
-      var map = new google.maps.Map(document.getElementById('content'), mapOptions);
+      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
       var points = [];
         var bounds = new google.maps.LatLngBounds();
          $(xml).find("trkpt").each(function() {
@@ -46,14 +50,6 @@ function newMap() {
         poly.setMap(map);
 }
 
-function initMap() {
-	var mapOptions = {
-			zoom: 5,
-			center: new google.maps.LatLng(46.003257147967815399169921875, 8.95168307237327098846435546875),
-			mapTypeId: 'roadmap'
-	};
-	var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-}
 
 function openFile() {
   var x = document.getElementById("exampleInputFile");
