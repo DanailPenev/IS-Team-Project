@@ -1,11 +1,11 @@
+// the next screen that will be loaded
 var mode = "<h1 class=\"cover-heading\">Select a mode</h1>\
             <p class=\"lead\">\
-              <button onclick=\"newMap()\" class=\"btn btn-lg btn-secondary\">Map</button>\
-              <button onclick=\"parse()\" class=\"btn btn-lg btn-secondary\">Stats</button>\
+              <button onclick=\"drawMap()\" class=\"btn btn-lg btn-secondary\">Map</button>\
+              <button onclick=\"stats()\" class=\"btn btn-lg btn-secondary\">Stats</button>\
             </p>";
 
-var xmlOpened;
-
+// Attach the form for file submission
 $(document).ready(function() {
     var form = document.getElementById('my-form');
 	if (form.attachEvent) {
@@ -15,11 +15,32 @@ $(document).ready(function() {
 	}
 });
 
-function parseFile() {
+// read the uploaded file
+function openFile() {
+  var x = document.getElementById("exampleInputFile");
+  if ('files' in x) {
+    var file = x.files[0];
+    var parts = file.name.split('.');
+    var ext = parts[parts.length - 1];
+    if (ext != 'gpx') {
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(){
+      window.xmlOpened = reader.result;
+      showModePage();
+    };
+    reader.readAsText(file);
+  }
+};
+
+// Load the next screen
+function showModePage() {
 	document.getElementById("content").innerHTML = mode;
 }
 
-function newMap() {
+// Draw the map with the Google API and remove previous elements on screen
+function drawMap() {
     $("#removeme").css("visibility", "hidden");
     var element = document.getElementById("removeme");
     element.outerHTML = "";
@@ -53,27 +74,8 @@ function newMap() {
         poly.setMap(map);
 }
 
-
-function openFile() {
-  var x = document.getElementById("exampleInputFile");
-  if ('files' in x) {
-    var file = x.files[0];
-    var parts = file.name.split('.');
-    var ext = parts[parts.length - 1];
-    if (ext != 'gpx') {
-      return;
-    }
-    var reader = new FileReader();
-    reader.onload = function(){
-      window.xmlOpened = reader.result;
-      console.log(xmlOpened);
-      parseFile();
-    };
-    reader.readAsText(file);
-  }
-};
-
-function parse(){
+// Draw the chart
+function stats(){
   $("#removeme").css("visibility", "hidden");
   var element = document.getElementById("removeme");
     element.outerHTML = "";
@@ -101,8 +103,6 @@ function parse(){
   for (i=0; i<elements.length; i++){
       elevations.push(elements[i].innerHTML);
   }
-  console.log(elevations);
-  console.log(times);
   var points = [];
   for (i=0; i<times.length; i++){
     var point = new Object();
@@ -110,7 +110,6 @@ function parse(){
     point.y = elevations[i];
     points.push(point);
   }
-  console.log(points);
   var ctx = document.getElementById("myChart");
   var myLineChart = new Chart(ctx, {
     type: 'line',
